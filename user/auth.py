@@ -7,7 +7,6 @@ from user.models import User
 from rest_framework.authentication import get_authorization_header
 from rest_framework.exceptions import AuthenticationFailed
 from django.utils.encoding import smart_text
-from utils.log import log_user_connect, log_user_first_connection
 
 
 def get_jwt_value(request):
@@ -27,7 +26,6 @@ def get_jwt_value(request):
     return auth[1]
 
 
-@log_user_first_connection
 def create_user(request, id_token):
     access_token = get_jwt_value(request).decode("utf-8")
     return User.create(
@@ -39,7 +37,6 @@ def create_user(request, id_token):
     )
 
 
-@log_user_connect
 def get_user_by_id(request, id_token):
     try:
         return User.objects.get(sub=id_token.get("sub"))
